@@ -1,0 +1,3 @@
+opencv-python
+huey>=1.11.0
+sqlalchemy>=1.2.17
