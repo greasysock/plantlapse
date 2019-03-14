@@ -1,4 +1,4 @@
-import cv2, time, os
+import cv2, datetime, os
 
 output_path = "/home/pi/captures/cam{}"
 
@@ -22,7 +22,7 @@ def cam_capture():
             p = output_path.format(index)
             check_path(p)
             ret, frame = camera.read()
-            cv2.imwrite("{}/{}.jpg".format(int(p,time.time())), frame)
+            cv2.imwrite("{}/{}.jpg".format(p, int(datetime.datetime.now().timestamp())), frame)
             camera.release()
             print("Image captured on camera {}".format(index))
 
