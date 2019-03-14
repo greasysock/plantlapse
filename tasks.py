@@ -7,7 +7,7 @@ def get_cameras():
     out_cams = list()
     for device in dev:
         if "video" in device:
-            print(device[:-1])
+            print(device[-1])
 
 get_cameras()
 
