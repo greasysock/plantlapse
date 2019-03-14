@@ -1,22 +1,30 @@
 from huey import RedisHuey, crontab
 import cv2, time, os
 
+output_path = "captures/cam{}"
+
 huey = RedisHuey('timelapseapp')
 def get_cameras():
     dev = os.listdir('/dev/')
     out_cams = list()
     for device in dev:
         if "video" in device:
-            print(device[-1])
+            index = int(device[-1])
+            c = (index, cv2.VideoCapture(index))
+            out_cams.append(c)
+    return out_cams
 
-get_cameras()
+def check_path(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 @huey.periodic_task(crontab(minute='*'))
 def cam_capture():
-    video_capture = cv2.VideoCapture(0)
-    if not video_capture.isOpened():
-        raise Exception("Could not open video device")
-
-    ret, frame = video_capture.read()
-    video_capture.release()
-    cv2.imwrite("captures/{}.jpg".format(time.time()), frame)
+    cameras = get_cameras()
+    for index, camera in cameras:  
+        if camera.isOpened():
+            p = output_path.format(index)
+            check_path(p)
+            ret, frame = camera.read()
+            cv2.imwrite("{}/{}.jpg".format(p,time.time()), frame)
+            camera.release()
