@@ -23,3 +23,4 @@ def cam_capture():
             ret, frame = camera.read()
             cv2.imwrite("{}/{}.jpg".format(p,time.time()), frame)
             camera.release()
+            print("Image captured on camera {}".format(index))
