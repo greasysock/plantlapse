@@ -1,6 +1,6 @@
 import cv2, time, os
 
-output_path = "captures/cam{}"
+output_path = "/home/pi/captures/cam{}"
 
 def get_cameras():
     dev = os.listdir('/dev/')
@@ -18,9 +18,14 @@ def cam_capture():
     cameras = get_cameras()
     for index, camera in cameras:  
         if camera.isOpened():
+            camera.set(5,float(1))
             p = output_path.format(index)
             check_path(p)
             ret, frame = camera.read()
             cv2.imwrite("{}/{}.jpg".format(p,time.time()), frame)
             camera.release()
             print("Image captured on camera {}".format(index))
+
+
+if __name__ == "__main__":
+    cam_capture()
